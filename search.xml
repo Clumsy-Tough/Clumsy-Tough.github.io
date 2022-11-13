@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>15. 3Sum</title>
+    <url>/2022/11/13/15-3Sum/</url>
+    <content><![CDATA[<span id="more"></span>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>11. Container With Most Water</title>
+    <url>/2022/11/12/11-Container-With-Most-Water/</url>
+    <content><![CDATA[<ol start="11">
+<li>Container With Most Water (Medium)</li>
+</ol>
+<p>You are given an integer array <code>height</code> of length <code>n</code>. There are <code>n</code> vertical lines drawn such that the two endpoints of the <code>ith</code> line are <code>(i, 0)</code> and <code>(i, height[i])</code>.</p>
+<p>Find two lines that together with the x-axis form a container, such that the container contains the most water.</p>
+<p>Return <em>the maximum amount of water a container can store</em>.</p>
+<p><strong>Notice</strong> that you may not slant the container.</p>
+<span id="more"></span>
+
+
+
+<p><strong>Example 1:</strong></p>
+<p><img src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/17/question_11.jpg" alt="img"></p>
+<figure class="highlight smali"><table><tr><td class="code"><pre><span class="line">Input: height = [1,8,6,2,5,4,8,3,7]</span><br><span class="line">Output: 49</span><br><span class="line">Explanation: The above vertical lines are represented by<span class="built_in"> array </span>[1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Input</span>: height =<span class="meta"> [1,1]</span></span><br><span class="line"><span class="attribute">Output</span>: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>n == height.length</code></li>
+<li><code>2 &lt;= n &lt;= 105</code></li>
+<li><code>0 &lt;= height[i] &lt;= 104</code></li>
+</ul>
+<h4 id="正确思路"><a href="#正确思路" class="headerlink" title="正确思路"></a>正确思路</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxArea</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/* 双指针基本思路 */</span></span><br><span class="line">        <span class="comment">/* 只有当遇到更高的 height 项才调整 */</span></span><br><span class="line">        <span class="type">int</span> result = <span class="number">0</span>, left = <span class="number">0</span>, right = height.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> tmp;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; right)&#123;</span><br><span class="line">            tmp = <span class="built_in">min</span>(height[left], height[right]) * (right - left);</span><br><span class="line">            result = <span class="built_in">max</span>(result, tmp);</span><br><span class="line">            <span class="comment">/* 如果使left高，那么right左移；如果相等，都可以 */</span></span><br><span class="line">            <span class="keyword">if</span> (height[left] &lt; height[right])&#123;</span><br><span class="line">                left++;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h5><figure class="highlight coq"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span> <span class="number">8</span> <span class="number">6</span> <span class="number">2</span> <span class="number">5</span> <span class="number">4</span> <span class="number">8</span> <span class="number">3</span> <span class="number">7</span></span><br><span class="line"></span><br><span class="line">初始：		<span class="number">1</span> <span class="number">7</span>, <span class="number">8</span></span><br><span class="line"><span class="built_in">left</span> 右移：<span class="number">8</span> <span class="number">7</span>，<span class="number">49</span></span><br><span class="line"><span class="built_in">right</span>左移：<span class="number">8</span> <span class="number">3</span>, <span class="number">49</span></span><br><span class="line"><span class="built_in">right</span>左移：<span class="number">8</span> <span class="number">8</span>, <span class="number">49</span></span><br><span class="line"><span class="built_in">left</span> 右移：<span class="number">6</span> <span class="number">8</span>, <span class="number">49</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h5><p>时间复杂度 O(n)，空间复杂度 O(1)</p>
+<h4 id="我的思路"><a href="#我的思路" class="headerlink" title="我的思路"></a>我的思路</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxArea</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/* 双指针，起始状态是头和尾 */</span></span><br><span class="line">        <span class="comment">/* 一开始是left指针向右移，当所得容量变大时，使right指针向左移 */</span></span><br><span class="line">        <span class="type">int</span> len = height.<span class="built_in">size</span>();</span><br><span class="line">        <span class="type">int</span> left = <span class="number">0</span>, right = len - <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> result = <span class="built_in">min</span>(height[left], height[right]) * (right - left);</span><br><span class="line">        <span class="type">int</span> tmp = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">/* flag 指示指针的移动方向 */</span></span><br><span class="line">        <span class="type">bool</span> flag = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">while</span> (left != right &amp;&amp; left &lt; right) &#123;</span><br><span class="line">            left += flag;</span><br><span class="line">            right += ~flag;</span><br><span class="line">            tmp = <span class="built_in">min</span>(height[left], height[right]) * (right - left);</span><br><span class="line">            <span class="keyword">if</span> (tmp &gt; result)&#123;</span><br><span class="line">                result = tmp;</span><br><span class="line">                flag = ~flag;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><ol>
+<li>双指针方向应该随着两端的高度，而不是根据 res 调整</li>
+<li>res 时刻都是当前状态的最大值</li>
+<li>从两端向中间，每次container的宽度都会减一，因而每次的宽度都比后面循环的长，因为“桶的容量取决于短板”，因而应到保留高板，调整另一端，才有可能更大</li>
+<li>当两端的值相等时(假设为x)，移动哪端都可以，都移动也可以：<ul>
+<li>倘若 height[left - right] 都小于 x，那么当前res就是最大res</li>
+<li>倘若存在 height[k] 大于x，那么由于“桶的容量取决于短板”，当前res仍是最大res</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>C++ 类的静态成员变量</title>
+    <url>/2022/09/05/C-%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/</url>
+    <content><![CDATA[<p>C++ 类的静态成员变量一定需要在全局定义</p>
+<p>声明只是定义一个符号，不占用存储空间</p>
+<p>定义是分配内存空间</p>
+<p>初始化是赋一个初始值</p>
+<p>C++ 中类的静态成员变量只是声明，没有定义，没有分配空间</p>
+<p>需要在类的外面定义，实际上是给静态成员变量分配内存</p>
+<span id="more"></span>
+
+
+
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> a;	<span class="comment">/* 声明但未定义，还为分配内存 */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; A::a &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译以上代码会出现 undefined reference to <code>A::a</code></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> a;	<span class="comment">/* 声明但未定义，还为分配内存 */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> A::a;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; A::a &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上代码打印出 0，默认初始化为 0，也可以 <code>int A::a=3</code>，定义后初始化</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++ static</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>书单和算法</title>
+    <url>/2022/08/30/%E4%B9%A6%E5%8D%95%E5%92%8C%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><ul>
+<li><p><a href="https://leetcode.com/">Leetcode</a></p>
+</li>
+<li><p><a href="https://www.nowcoder.com/exam/company">牛客</a></p>
+</li>
+</ul>
+<h3 id="书单"><a href="#书单" class="headerlink" title="书单"></a>书单</h3><ul>
+<li><h5 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h5><ul>
+<li><input disabled="" type="checkbox"> <strong>深入理解计算机系统</strong></li>
+<li><input disabled="" type="checkbox"> <strong>现代操作系统(Modern Operating Systems)</strong></li>
+<li><input disabled="" type="checkbox"> <strong>现代操作系统：原理与实现</strong></li>
+<li><input disabled="" type="checkbox"> <strong>操作系统概念(Operating System Concepts)</strong></li>
+<li><input disabled="" type="checkbox"> 自己动手写操作系统</li>
+<li><input disabled="" type="checkbox"> 操作系统原理</li>
+<li><input disabled="" type="checkbox"> Linux 内核设计与实现</li>
+<li><input disabled="" type="checkbox"> 程序是怎样跑起来的</li>
+<li><input disabled="" type="checkbox"> 鸟哥的 Linux 私房菜</li>
+</ul>
+</li>
+<li><h5 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h5><ul>
+<li><input disabled="" type="checkbox"> <strong>计算机网络-谢希仁</strong></li>
+<li><input disabled="" type="checkbox"> <strong>计算机网络：自顶向下方法</strong></li>
+<li><input disabled="" type="checkbox"> 计算机网络：系统方法(Computer Networks, A systems Approach)</li>
+<li><input disabled="" type="checkbox"> <strong>TCP&#x2F;IP 详解卷一</strong></li>
+<li><input disabled="" type="checkbox"> <strong>TCP&#x2F;IP 详解卷二</strong></li>
+<li><input disabled="" type="checkbox"> TCP&#x2F;IP 详解卷三</li>
+<li><input disabled="" type="checkbox"> HTTP 权威指南</li>
+<li><input disabled="" type="checkbox"> HTTP 核心总结</li>
+</ul>
+</li>
+<li><h5 id="编译原理"><a href="#编译原理" class="headerlink" title="编译原理"></a>编译原理</h5><ul>
+<li><input disabled="" type="checkbox"> <strong>Compilers: Principles, Techniques, and Tools(龙书)</strong></li>
+<li><input disabled="" type="checkbox"> <strong>Modern Compiler Implementation in C(虎书)</strong></li>
+<li><input disabled="" type="checkbox"> Modern Compiler Design(现代编译程序设计)</li>
+<li><input disabled="" type="checkbox"> 编译原理及实践</li>
+<li><input disabled="" type="checkbox"> Engineering a Compiler(蛮多人推)</li>
+<li><input disabled="" type="checkbox"> Advanced Compiler Design and Implementation(鲸书)</li>
+</ul>
+</li>
+<li><h5 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h5><ul>
+<li><input disabled="" type="checkbox"> 大话处理器——处理器基础知识读本(万木杨)(有趣)</li>
+<li><input disabled="" type="checkbox"> <strong>计算机组成与设计：硬件&#x2F;软件接口</strong></li>
+<li><input disabled="" type="checkbox"> <strong>计算机体系结构：量化研究方法</strong></li>
+<li><input disabled="" type="checkbox"> 计算机组成与系统结构</li>
+<li><input disabled="" type="checkbox"> 计算机组成原理</li>
+</ul>
+</li>
+<li><h5 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h5><ul>
+<li><input disabled="" type="checkbox"> C++ 程序设计语言(The C++ Programming Language)</li>
+<li><input disabled="" type="checkbox"> C++ 程序标准库(C++ Standard Library Tutorial and Reference)</li>
+<li><input disabled="" type="checkbox"> The Standard C Library</li>
+<li><input disabled="" type="checkbox"> <strong>C++ Primer</strong></li>
+<li><input disabled="" type="checkbox"> <strong>C++ Primer Plus</strong></li>
+<li><input disabled="" type="checkbox"> <strong>C++ 编程思想(Thinking in C++)</strong></li>
+<li><input disabled="" type="checkbox"> 面向对象程序设计 —— C++语言描述</li>
+<li><input disabled="" type="checkbox"> 数据结构(C++语言版)</li>
+<li><input disabled="" type="checkbox"> <strong>Effective C++</strong></li>
+<li><input disabled="" type="checkbox"> Exceptional C++</li>
+<li><input disabled="" type="checkbox"> More Exceptional C++</li>
+<li><input disabled="" type="checkbox"> <strong>C++ 编程规范</strong></li>
+</ul>
+</li>
+<li><h5 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h5><ul>
+<li><input disabled="" type="checkbox"> 数据库系统概论(王珊&#x2F;萨师煊)</li>
+<li><input disabled="" type="checkbox"> Database System Concepts(数据库系统概论)</li>
+<li><input disabled="" type="checkbox"> 分布式数据库系统原理</li>
+<li><input disabled="" type="checkbox"> Database System Implementation(数据库系统实现)</li>
+<li><input disabled="" type="checkbox"> MySQL 必知必会</li>
+<li><input disabled="" type="checkbox"> 高性能 MySQL</li>
+<li><input disabled="" type="checkbox"> MySQL 技术内幕：innodb 存储引擎</li>
+</ul>
+</li>
+<li><h5 id="公有云-x2F-分布式数据库…"><a href="#公有云-x2F-分布式数据库…" class="headerlink" title="公有云&#x2F;分布式数据库…"></a>公有云&#x2F;分布式数据库…</h5></li>
+</ul>
+]]></content>
+      <categories>
+        <category>清单</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>2022年秋招</title>
+    <url>/2022/08/30/2022%E5%B9%B4%E7%A7%8B%E6%8B%9B/</url>
+    <content><![CDATA[<h3 id="2022-秋招"><a href="#2022-秋招" class="headerlink" title="2022 秋招"></a>2022 秋招</h3><p><a href="https://career.huawei.com/reccampportal/portal5/index.html">华为</a>：通用软件开发工程师、操作系统开发工程师(7月开始)</p>
+<p><a href="https://talent.alibaba.com/?lang=zh">阿里&#x2F;蚂蚁</a>：研发工程师 C&#x2F;C++ (8月底-9月底)</p>
+<p><a href="https://app.mokahr.com/apply/armchina/885#/">ARM</a>：软件工程师(8月中旬开始)</p>
+<p><a href="https://jobs.bytedance.com/">字节</a>：后端开发工程师(8月初开始)</p>
+<p><a href="https://careers.pinduoduo.com/campus/">拼多多</a>：(8月初开始-9月初)</p>
+<p><a href="https://www.nvidia.cn/about-nvidia/careers/">英伟达</a></p>
+<p><a href="https://chinacampus.jobs.intel.cn/intel/home/index?page=index">英特尔</a>：(8月开始)</p>
+<p>腾讯</p>
+<p><a href="https://talent.didiglobal.com/">滴滴</a>：C++ 后端研发工程师(8月底-9月初)</p>
+<p><a href="https://jobs.bilibili.com/home">哔哩哔哩</a>：系统研发工程师(8月初-11月中)</p>
+<p><a href="https://campus.xiaohongshu.com/">小红书</a>：C++开发工程师(7月中开始)</p>
+<p>饿了么</p>
+<p>携程</p>
+<p>58同城</p>
+]]></content>
+      <categories>
+        <category>清单</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>git 撤销某次 push</title>
+    <url>/2022/07/22/git-%E6%92%A4%E9%94%80%E6%9F%90%E6%AC%A1-push/</url>
+    <content><![CDATA[<p>git 撤销某次 push</p>
+<p><strong>–hard 会使修改全部丢失，记得备份！！！</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 找到要回退版本的 commit 版本号</span></span><br><span class="line">git <span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 回退</span></span><br><span class="line">git reset --hard &lt;版本号&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 重新 push</span></span><br><span class="line">git push --force</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看某次 commit 修改了哪些文件</span></span><br><span class="line">git show &lt;版本号&gt; --<span class="built_in">stat</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>工具命令</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux cp 复制文件夹</title>
+    <url>/2022/07/22/Linux-cp-%E5%A4%8D%E5%88%B6%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
+    <content><![CDATA[<p>源目录是 dir1，目标目录为 dir2，将 dir1 下所有文件复制到 dir2 下</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># dir2 不存在</span></span><br><span class="line"><span class="built_in">cp</span> -r dir1 dir2</span><br><span class="line"></span><br><span class="line"><span class="comment"># dir2 存在</span></span><br><span class="line"><span class="comment">## cp -r dir1 dir2 会将 dir1 文件夹复制到 dir2 下</span></span><br><span class="line"><span class="built_in">cp</span> -r dir1/* dir2</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>docker 镜像使 centos-root 分区容量爆满</title>
+    <url>/2022/07/18/docker-%E9%95%9C%E5%83%8F%E4%BD%BF-centos-root-%E5%88%86%E5%8C%BA%E5%AE%B9%E9%87%8F%E7%88%86%E6%BB%A1/</url>
+    <content><![CDATA[<p>docker 镜像默认放在 &#x2F;centos-root 分区下，镜像多或大都很容易将该分区吃满</p>
+<p>三种解决方案：</p>
+<ol>
+<li>清理镜像</li>
+<li>磁盘扩容</li>
+<li>移动 docker 镜像目录</li>
+</ol>
+<span id="more"></span>
+
+
+
+<h4 id="清理镜像"><a href="#清理镜像" class="headerlink" title="清理镜像"></a>清理镜像</h4>   <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">kill</span> [CONTAINER ID]</span><br><span class="line"></span><br><span class="line">docker <span class="built_in">rm</span> [CONTAINER ID]</span><br><span class="line"></span><br><span class="line">docker rmi [IMAGE ID]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理已退出镜像</span></span><br><span class="line">docker <span class="built_in">rm</span> -f $(docker ps -a | grep Exit | awk <span class="string">&#x27;&#123; print $1 &#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有未被 tag 标记和未被容器使用的镜像</span></span><br><span class="line">docker image prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有未被容器使用的镜像</span></span><br><span class="line">docker image prune -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有停止运行的容器</span></span><br><span class="line">docker container prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有未被挂载的卷</span></span><br><span class="line">docker volume prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有网络</span></span><br><span class="line">docker network prune</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除 docker 所有资源</span></span><br><span class="line">docker system prune</span><br><span class="line"></span><br><span class="line">docker system prune -a</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="磁盘扩容"><a href="#磁盘扩容" class="headerlink" title="磁盘扩容"></a>磁盘扩容</h4><p>[TODO] 留坑…</p>
+<h4 id="移动-docker-镜像目录"><a href="#移动-docker-镜像目录" class="headerlink" title="移动 docker 镜像目录"></a>移动 docker 镜像目录</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># save 镜像</span></span><br><span class="line">docker images</span><br><span class="line">docker save IAMGE [IMAGE...] | gzip &gt; docker-images.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># load 镜像</span></span><br><span class="line">docker load -i docker-images.tar.gz </span><br><span class="line"></span><br><span class="line"><span class="comment"># 将镜像从一个主机迁移到另一个主机</span></span><br><span class="line">docker save IAMGE [IMAGE...] | bzip2 | ssh @xx.xxx.xx.x <span class="string">&quot;cat | docker load&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改镜像目录</span></span><br><span class="line">sudo <span class="built_in">mkdir</span> /home/docker</span><br><span class="line">sudo vi /etc/docker/daemon.json</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;http://hub-mirror.c.163.com&quot;</span>],</span><br><span class="line">  <span class="string">&quot;data-root&quot;</span>: <span class="string">&quot;/home/docker&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ssh 连接远程 Linux 服务器</title>
+    <url>/2022/07/17/ssh-%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%20Linux%20%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<p>ssh 连接远程 Linux 服务器</p>
+<span id="more"></span>
+
+
+
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~	<span class="comment"># 若是 root 用户，记得 su $&#123;username&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> .ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> .ssh</span><br><span class="line"></span><br><span class="line"><span class="built_in">touch</span> authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> xxx.pub &gt;&gt; authorized_keys	<span class="comment"># 将公钥写入</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> 600 authorized_keys	<span class="comment"># 必须 600</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">chmod</span> 700 ~/.ssh	<span class="comment"># 755也可以，不能被其他用户写</span></span><br><span class="line"></span><br><span class="line">ssh <span class="variable">$&#123;username&#125;</span>@IP -p port -i xxx	<span class="comment"># -i 私钥</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>ssh</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 用户管理</title>
+    <url>/2022/07/17/Linux-%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<p>Linux 用户管理…</p>
+<span id="more"></span>
+
+
+
+<ol>
+<li><p>用户管理：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 新增用户</span></span><br><span class="line">useradd -m <span class="variable">$&#123;username&#125;</span></span><br><span class="line"></span><br><span class="line">passwd <span class="variable">$&#123;username&#125;</span></span><br><span class="line"></span><br><span class="line">usermod -a -G sudo <span class="variable">$&#123;username&#125;</span>	<span class="comment"># -a 保留原有组，-G 指定新组</span></span><br><span class="line"></span><br><span class="line">useradd -m -s /bin/bash <span class="variable">$&#123;username&#125;</span></span><br><span class="line"></span><br><span class="line">useradd -m -G sudo -s /bin/bash <span class="variable">$&#123;username&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除用户</span></span><br><span class="line">userdel -r <span class="variable">$&#123;username&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看用户</span></span><br><span class="line"><span class="built_in">groups</span> <span class="variable">$&#123;username&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>用户组管理</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">groupadd <span class="variable">$&#123;group&#125;</span></span><br><span class="line"></span><br><span class="line">groupdel <span class="variable">$&#123;group&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cat</span> /etc/group</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Linux 服务器科学上网</title>
+    <url>/2022/07/17/Linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</url>
+    <content><![CDATA[<p>Linux + Clash 翻墙 …</p>
+<span id="more"></span>
+
+
+
+<ol>
+<li><p>安装 clash</p>
+<p>发布在 <a href="https://github.com/Dreamacro/clash/releases">Releases · Dreamacro&#x2F;clash (github.com)</a></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装对应版本，一般最新 clash-linux-amd64-vxxxx.gz</span></span><br><span class="line">wget https://github.com/Dreamacro/clash/releases/download/v1.11.4/clash-linux-amd64-v1.11.4.gz</span><br><span class="line"></span><br><span class="line">gunzip clash-linux-amd64-v1.11.4.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为了方便，将解压出来的文件改名为 clash</span></span><br><span class="line"><span class="built_in">mv</span> clash-linux-amd64-v1.11.4.gz clash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加执行权限</span></span><br><span class="line"><span class="built_in">chmod</span> +x clash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行以初始化</span></span><br><span class="line">./clash</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>配置 clash</p>
+<p>首次配置后生成配置文件在 ~&#x2F;.config&#x2F;clash</p>
+<p>需要 Country.mmdb 和 config.yaml</p>
+<p>没有的话从别地儿下载，也在 ~&#x2F;.config 下</p>
+</li>
+<li><p>设置 <code>clash</code> 直接运行</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sudo <span class="built_in">mv</span> clash/clash /usr/local/bin/clash</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>打开代理</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以下内容写入 ~/.bashrc</span></span><br><span class="line"><span class="comment"># 7890 是 config.yaml 中的 port</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">proxy_off</span></span>() &#123;</span><br><span class="line">	<span class="built_in">unset</span> http_proxy</span><br><span class="line">	<span class="built_in">unset</span> https_proxy</span><br><span class="line">	<span class="built_in">unset</span> no_proxy</span><br><span class="line">	<span class="built_in">echo</span> -e <span class="string">&quot;Proxy Off&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">proxy_on</span></span>()&#123;</span><br><span class="line">	<span class="built_in">export</span> http_proxy=<span class="string">&quot;http://127.0.0.1:7890&quot;</span></span><br><span class="line">	<span class="built_in">export</span> https_proxy=<span class="variable">$http_proxy</span></span><br><span class="line">	<span class="built_in">export</span> no_proxy=<span class="string">&quot;localhost,127.0.0.1,localaddress,.localdomain.com&quot;</span></span><br><span class="line">	<span class="built_in">echo</span> -e <span class="string">&quot;Proxy On&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>如何使用</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># PS：单独开一个终端运行 clash 也可以</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 后台运行</span></span><br><span class="line">clash &amp;</span><br><span class="line"><span class="built_in">nohup</span> clash &amp;	<span class="comment"># 关闭终端不终止，默认输出到 nohup.out，重定向增加 `&gt; /dev/null 2&gt;&amp;1`</span></span><br><span class="line"><span class="built_in">nohup</span> clash &gt; /dev/null 2&gt;&amp;1 &amp;	<span class="comment"># 建议打开，否则在命令行一直输出</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 打开代理</span></span><br><span class="line">proxy_on	<span class="comment"># 仅限于当前终端</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line">wget www.google.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭代理</span></span><br><span class="line">proxy_off</span><br><span class="line"></span><br><span class="line"><span class="comment"># 退出 clash</span></span><br><span class="line"><span class="built_in">jobs</span>		<span class="comment"># 查看后台命令，-l 查看任务 PID</span></span><br><span class="line"><span class="built_in">fg</span> %jobid	<span class="comment"># 放回前台</span></span><br><span class="line">Ctrl-C		<span class="comment"># 终止</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或</span></span><br><span class="line"><span class="built_in">jobs</span> -l		<span class="comment"># 查看任务 PID</span></span><br><span class="line"><span class="built_in">kill</span> -9 PID	<span class="comment"># 终止</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+<li><p>设置开机自启动</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将配置文件移动到 /etc 目录</span></span><br><span class="line">sudo <span class="built_in">mv</span> ~/.config/clash /etc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存到 /etc/systemd/system/clash.service</span></span><br><span class="line">[Unit]</span><br><span class="line">Description=Clash Daemon</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/local/bin/clash -d /etc/clash/</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置开机自启动</span></span><br><span class="line">sudo systemctl <span class="built_in">enable</span> clash.service</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line">sudo systemctl start clash.service</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看服务状态</span></span><br><span class="line">sudo systemctl status clash.service</span><br><span class="line"></span><br><span class="line"><span class="comment"># 停止服务</span></span><br><span class="line">sudo systemctl stop clash</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>科学上网</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Typora beta expired 问题</title>
+    <url>/2022/07/17/Typora-beta-expired-%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>Typora 最后一个免费版本是 <code>0.11.18</code></p>
+<p>运行时会提示 <code>The beta version of typora is expired, please download and install a newer version</code></p>
+<span id="more"></span>
+
+
+
+<p>尝试断网运行没用</p>
+<p>解决方案：</p>
+<ol>
+<li>打开注册表</li>
+<li>找到 <code>计算机\HKEY_CURRENT_USER\SOFTWARE\Typora</code></li>
+<li>右键单击 <code>Typora</code></li>
+<li>修改权限，<strong>Administrators</strong> –&gt; <strong>完全控制拒绝</strong>、<strong>读取拒绝</strong></li>
+</ol>
+<p>PS：记得在偏好设置中关闭自动更新</p>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Typora</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo + GitHub 搭建博客</title>
+    <url>/2022/07/15/Hexo-GitHub-%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>欢迎来到我的博客 ~</p>
+<span id="more"></span>
+
+
+
+<ol>
+<li><p>搭建博客：<a href="https://zhuanlan.zhihu.com/p/60578464#:~:text=%E4%BD%BF%E7%94%A8%20Hexo%2BGitHub%20%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%85%8D%E8%B4%B9%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B%EF%BC%88%E5%B0%8F%E7%99%BD%E5%90%91%EF%BC%89%201%20%E5%87%86%E5%A4%87%202%20%E8%BF%9E%E6%8E%A5%20Github....,Hexo%20%E5%88%B0%20GitHub%20Pages%206%20%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89....%207%20%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8">使用 Hexo+GitHub 搭建个人免费博客教程（小白向）</a></p>
+</li>
+<li><p>博客美化：<a href="https://blog.csdn.net/nightmare_dimple/article/details/86661502">Hexo博客优化之Next主题美化</a></p>
+</li>
+<li><p>标签和分类页：<a href="https://blog.csdn.net/qq_34243930/article/details/104056549">用Github Pages+Hexo搭建博客之(六)如何显示标签和分类页面的内容</a></p>
+</li>
+<li><p>图标网站：<a href="https://zhuanlan.zhihu.com/p/431105940">图标分享 | 30 个免费 icon 下载网站</a></p>
+</li>
+<li><p>站内搜索：<a href="https://www.jianshu.com/p/d388119a90ec">Hexo增加搜索功能</a></p>
+</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&#x27;xxx&#x27;</span></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">title: Hello World <span class="comment"># 标题</span></span><br><span class="line"><span class="built_in">date</span>: 2019/3/26 hh:mm:ss <span class="comment"># 时间</span></span><br><span class="line">categories: <span class="comment"># 分类</span></span><br><span class="line">- Diary</span><br><span class="line">tags: <span class="comment"># 标签</span></span><br><span class="line">- PS3</span><br><span class="line">- Games</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">摘要</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line">正文</span><br><span class="line"></span><br><span class="line">hexo new <span class="string">&quot;name&quot;</span>       <span class="comment"># 新建文章</span></span><br><span class="line">hexo new page <span class="string">&quot;name&quot;</span>  <span class="comment"># 新建页面</span></span><br><span class="line">hexo g                <span class="comment"># 生成页面</span></span><br><span class="line">hexo d                <span class="comment"># 部署发布</span></span><br><span class="line">hexo g -d             <span class="comment"># 生成页面并部署</span></span><br><span class="line">hexo s                <span class="comment"># 本地预览</span></span><br><span class="line">hexo clean            <span class="comment"># 清除缓存和已生成的静态文件</span></span><br><span class="line">hexo <span class="built_in">help</span>             <span class="comment"># 帮助</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置置顶，在博客的根目录执行</span></span><br><span class="line">npm uninstall hexo-generator-index --save	<span class="comment"># 不做好像也可</span></span><br><span class="line">npm install hexo-generator-index-pin-top --save</span><br><span class="line">---</span><br><span class="line">title: xxx</span><br><span class="line">top: <span class="literal">true</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>Github.io 教程</tag>
+      </tags>
+  </entry>
+</search>
