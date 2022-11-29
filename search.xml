@@ -1,6 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Cache 组织方式</title>
+    <url>/2022/11/29/Cache-%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<p>Cache 寻址需要 index、tag、offset</p>
+<p>index 找到 cache set</p>
+<p>tag 找到 cache line</p>
+<p>offset 找到字节</p>
+<span id="more"></span>
+
+
+
+<ol>
+<li><p>N 路组相联表示一个 set 中有 N 个 cache line</p>
+</li>
+<li><p>三者组织顺序：tag | index | offset</p>
+<p>之所以将 offset 放在中间，是考虑了空间局部性(spacial locality)</p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">例如：(CSAPP 中的例子)</span><br><span class="line">4组高速缓存，index：00<span class="number"> 01 </span>10 11</span><br><span class="line">倘若高位索引，0000 -<span class="number"> 0011 </span>都在<span class="number"> 00 </span>set 中</span><br><span class="line">倘若中位索引，0000 -<span class="number"> 0011 </span>均匀分布在<span class="number"> 4 </span>个 set</span><br><span class="line">显然按照一般的连续访问规则，中位索引可以获得更高的局部性</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>cache 有两个问题：</p>
+<ul>
+<li>歧义：一个虚拟地址对应到两个不同的物理地址，切换进程时需要 flush 缓存(<strong>线程ID区分？想起来的时候补充</strong>)</li>
+<li>别名：两个不同的虚拟地址对应到一个物理地址，会增加维护一致性的难度</li>
+</ul>
+<blockquote>
+<p>tag 取自虚拟地址导致歧义，index 取自虚拟地址导致别名</p>
+</blockquote>
+</li>
+<li><p>cache 的组织方式有三种，VIVT、VIPT、PIPT</p>
+<ul>
+<li>VIVT 有歧义和别名问题</li>
+<li>PIPT 在 cache 的同时，MMU 将 PA 翻译为 VA，不存在歧义和别名问题，但增加了硬件设计的难度</li>
+<li>PIVT 没有意义，需要等到 MMU 结束后才能根据 PI(index) 找 set，再比较 VT(tag)</li>
+<li>VIPT 可以避免歧义，但不能完全避免别名<ul>
+<li>避免歧义：因为以物理地址作为 tag，因此可以避免歧义；具体来说，需要保证一个虚拟地址加上映射的物理地址，只能在 cache 中找到一个，也就是说 PT 需要满足条件，使 VI + PT 能找到唯一的值；假设以32位CPU为例，页表映射最小单位是4KB。我们假设虚拟地址&lt;12:4&gt;位(这是一个有别名问题的VIPT Cache)作为index，于此同时将虚拟地址&lt;31:12&gt;发送到MMU转换得到物理地址的&lt;31:12&gt;，这里我们把&lt;31:12&gt;作为tag，并不是&lt;31:13&gt;</li>
+<li>避免别名：当 <code>cache size / 总 way 数 ≤ page size</code> ，VI &#x3D; PI，没有别名问题；否则会有，避免方式是使返回地址总是 <code>cache size / set 数</code> 对齐，保证对应到不同的 set</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>参考：</p>
+<ol>
+<li>避免别名：<a href="https://zhuanlan.zhihu.com/p/503078043">https://zhuanlan.zhihu.com/p/503078043</a> (最后一个例子有问题)</li>
+<li>避免歧义和别名：<a href="https://zhuanlan.zhihu.com/p/107096130">https://zhuanlan.zhihu.com/p/107096130</a> (PT 大小有问题)</li>
+</ol>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>cache</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统发展趋势</title>
+    <url>/2022/11/21/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8F%91%E5%B1%95%E8%B6%8B%E5%8A%BF/</url>
+    <content><![CDATA[<h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><h5 id="硬件："><a href="#硬件：" class="headerlink" title="硬件："></a>硬件：</h5><p>大背景：摩尔定律失效(表现)</p>
+<p>原因：量子隧穿效应，设计成本剧增，(应该还有一点)  高温和漏电</p>
+<p>从技术的角度看，随着硅片上线路密度增加，其复杂性和差错率也将呈指数增长，同时也使全面而彻底的芯片测试几乎成为不可能。一旦芯片上线条的宽度达到纳米数量级时，相当于只有几个分子的大小，这种情况下材料的物理、化学性能将发生质的变化，致使采用现行工艺的半导体器件不能正常工作，摩尔定律从走向尽头</p>
+<p>发展方向：多核、众核()、异构硬件(领域专用)、超异构超融合(领域专用的下一步)</p>
+<p>超异构超融合：特斯拉的超异构、英伟达的超融合</p>
+<p>需求：可扩展性、针对性的优化、虚拟化技术融合？</p>
+<h5 id="应用："><a href="#应用：" class="headerlink" title="应用："></a>应用：</h5><p>大背景：</p>
+<p>原因：</p>
+<p>需求：分布式、单机、安全(单拎出来)</p>
+<p>分布式的挑战：异构的机器和网络、节点故障、网络不可靠；来自不确定性，不确定什么时候crash、断电、磁盘损坏、网络延迟、通信对端是否处理了发送的消息；分布式的规模放大了不确定性</p>
+<p>需求：</p>
+<ul>
+<li>可扩展性(动态伸缩)</li>
+<li>可靠性和可用性(7*24小时提供服务；计算结构正确、存储的数据不丢失)</li>
+<li>高性能(不同系统对性能的衡量指标不同；最常见的高并发单位时间内处理的任务越多越好、低延迟每个任务的平均时间越少越好)</li>
+<li>一致性(为了提高可用性可靠性，一般会引入冗余，一致性是保证节点上的状态一致，一致有很多等级，越强，对用户越友好，但是会制约系统的可用性；等级低，用户需要兼容数据不一致的情况，但系统的可用性、并发性会高)</li>
+<li>任务调度(？可扩展性有，一致性有)</li>
+</ul>
+<p>《分布式系统原理介绍》</p>
+<p>单机的挑战：</p>
+<p>领域专用设备增多(端设备增多)；领域专用应用，在领域需求方面对操作系统的要求更高；应用的范围扩大，主要是需求融合</p>
+<p>可(易)定制性、高性能(不同领域不同，吞吐率？和实时性)、混合关键系统</p>
+<p>安全的挑战：(安全和分布式、单机不在一个维度上)</p>
+<p>人-机-物融合(人-机-物融合在前面没有提到)，安全性弱意味着人的生命财产安全不受保障</p>
+<p>应用复杂，软件工程扩大、敏捷开发，迭代快，引入漏洞速度远远快于发现漏洞和解决漏洞的速度且供给面广</p>
+<p>云和数据中心上的数据集中，一旦出现漏洞，所有数据安全都将受到威胁</p>
+<p>国家之间的战争，(俄乌战争，航天；信息窃取，但好像信息泄露主要是因为内部人员管理不善)</p>
+<p>隔离性属于安全？(怎么体现？)</p>
+]]></content>
+      <tags>
+        <tag></tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>18.4 Sum</title>
+    <url>/2022/11/15/18-4-Sum/</url>
+    <content><![CDATA[<dev style="display:none">
+
+<p>(<strong style="color:green">Easy</strong>)</p>
+<p>(<strong style="color:#f0ad4e">Medium</strong>)</p>
+<p>(<strong style="color:red">Hard</strong>)</p>
+</dev>
+
+
+
+<p>18.4 Sum (<strong style="color:#f0ad4e">Medium</strong>)</p>
+<p>Given an array <code>nums</code> of <code>n</code> integers, return <em>an array of all the <strong>unique</strong> quadruplets</em> <code>[nums[a], nums[b], nums[c], nums[d]]</code> such that:</p>
+<ul>
+<li><code>0 &lt;= a, b, c, d &lt; n</code></li>
+<li><code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are <strong>distinct</strong>.</li>
+<li><code>nums[a] + nums[b] + nums[c] + nums[d] == target</code></li>
+</ul>
+<p>You may return the answer in <strong>any order</strong>.</p>
+<span id="more"></span>
+
+
+
+<p><strong>Example 1:</strong></p>
+<figure class="highlight subunit"><table><tr><td class="code"><pre><span class="line">Input: nums = [1,0,<span class="string">-1</span>,0,<span class="string">-2</span>,2], target = 0</span><br><span class="line">Output: [[<span class="string">-2</span>,<span class="string">-1</span>,1,2],[<span class="string">-2</span>,0,0,2],[<span class="string">-1</span>,0,0,1]]</span><br></pre></td></tr></table></figure>
+
+<p><strong>Example 2:</strong></p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">Input: nums = [<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>], target = <span class="number">8</span></span><br><span class="line">Output: <span class="string">[[2,2,2,2]]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 200</code></li>
+<li><code>-109 &lt;= nums[i] &lt;= 109</code></li>
+<li><code>-109 &lt;= target &lt;= 109</code></li>
+</ul>
+<h4 id="我的思路"><a href="#我的思路" class="headerlink" title="我的思路"></a>我的思路</h4><details>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">fourSum</span>(vector&lt;<span class="type">int</span>&gt;&amp; nums, <span class="type">int</span> target) &#123;</span><br><span class="line">        <span class="comment">/* 仿照3sum，固定 i、j、k 找第四个数 */</span></span><br><span class="line">        <span class="comment">/* 需要注意类型转换，int -&gt; long */</span></span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; res;</span><br><span class="line">        <span class="type">int</span> len = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">if</span> (len &lt; <span class="number">4</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">sort</span>(nums.<span class="built_in">begin</span>(), nums.<span class="built_in">end</span>());</span><br><span class="line">        unordered_map&lt;<span class="type">long</span>, <span class="type">int</span>&gt; hashmap;</span><br><span class="line">        <span class="type">int</span> i, j, k;</span><br><span class="line">        <span class="type">long</span> tmpsum;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">            hashmap[nums[i]] = i;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (j = i + <span class="number">1</span>; j &lt; len; j++)&#123;</span><br><span class="line">                <span class="keyword">for</span> (k = j + <span class="number">1</span>; k &lt; len; k++)&#123;</span><br><span class="line">                    tmpsum = (<span class="type">long</span>)target - ((<span class="type">long</span>)nums[i] + nums[j] + nums[k]);</span><br><span class="line">                    <span class="keyword">if</span> (hashmap.<span class="built_in">count</span>(tmpsum) &amp;&amp; hashmap[tmpsum] &gt; k)&#123;</span><br><span class="line">                        res.<span class="built_in">push_back</span>(&#123;nums[i], nums[j], nums[k], (<span class="type">int</span>)tmpsum&#125;);</span><br><span class="line">                    &#125;</span><br><span class="line">                    k = hashmap[nums[k]];</span><br><span class="line">                &#125;</span><br><span class="line">                j = hashmap[nums[j]];</span><br><span class="line">            &#125;</span><br><span class="line">            i = hashmap[nums[i]];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+</details>
+
+
+
+<h4 id="优化思路"><a href="#优化思路" class="headerlink" title="优化思路"></a>优化思路</h4><details>
+
+
+
+
+</details>
+
+
+
+<h5 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h5><p>时间复杂度 O()，空间复杂度 O()</p>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+  </entry>
+  <entry>
     <title>16.3 Sum Closest</title>
     <url>/2022/11/14/16-3-Sum-Closest/</url>
     <content><![CDATA[<p>16.3 Sum Closest (<strong style="color:#f0ad4e">Medium</strong>)</p>
