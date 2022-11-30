@@ -20,28 +20,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"clumsy-tough.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="C++ 类的静态成员变量一定需要在全局定义 声明只是定义一个符号，不占用存储空间 定义是分配内存空间 初始化是赋一个初始值 C++ 中类的静态成员变量只是声明，没有定义，没有分配空间 需要在类的外面定义，实际上是给静态成员变量分配内存">
+    <meta name="description" content="syscall &amp; sysret sysenter &amp; sysexit    Intel 所有模式 仅 64 位长模式   AMD 仅传统模式 所有模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++ 类的静态成员变量">
-<meta property="og:url" content="https://clumsy-tough.github.io/2022/09/05/C-%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/index.html">
+<meta property="og:title" content="syscall 和 sysenter">
+<meta property="og:url" content="https://clumsy-tough.github.io/2022/11/30/syscall-%E5%92%8C-sysenter/index.html">
 <meta property="og:site_name" content="Clumsy-Tough&#39;s Blog">
-<meta property="og:description" content="C++ 类的静态成员变量一定需要在全局定义 声明只是定义一个符号，不占用存储空间 定义是分配内存空间 初始化是赋一个初始值 C++ 中类的静态成员变量只是声明，没有定义，没有分配空间 需要在类的外面定义，实际上是给静态成员变量分配内存">
+<meta property="og:description" content="syscall &amp; sysret sysenter &amp; sysexit    Intel 所有模式 仅 64 位长模式   AMD 仅传统模式 所有模式">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-09-05T14:12:43.000Z">
-<meta property="article:modified_time" content="2022-11-13T08:49:21.779Z">
+<meta property="article:published_time" content="2022-11-30T02:52:15.000Z">
+<meta property="article:modified_time" content="2022-11-30T03:05:36.593Z">
 <meta property="article:author" content="Clumsy-Tough">
-<meta property="article:tag" content="C++ static">
+<meta property="article:tag" content="系统调用">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://clumsy-tough.github.io/2022/09/05/C-%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/">
+<link rel="canonical" href="https://clumsy-tough.github.io/2022/11/30/syscall-%E5%92%8C-sysenter/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://clumsy-tough.github.io/2022/09/05/C-%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/","path":"2022/09/05/C-类的静态成员变量/","title":"C++ 类的静态成员变量"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://clumsy-tough.github.io/2022/11/30/syscall-%E5%92%8C-sysenter/","path":"2022/11/30/syscall-和-sysenter/","title":"syscall 和 sysenter"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>C++ 类的静态成员变量 | Clumsy-Tough's Blog</title>
+<title>syscall 和 sysenter | Clumsy-Tough's Blog</title>
   
 
 
@@ -220,7 +220,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://clumsy-tough.github.io/2022/09/05/C-%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/">
+    <link itemprop="mainEntityOfPage" href="https://clumsy-tough.github.io/2022/11/30/syscall-%E5%92%8C-sysenter/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/pearl.jpg">
@@ -233,12 +233,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="C++ 类的静态成员变量 | Clumsy-Tough's Blog">
+      <meta itemprop="name" content="syscall 和 sysenter | Clumsy-Tough's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C++ 类的静态成员变量
+          syscall 和 sysenter
         </h1>
 
         <div class="post-meta-container">
@@ -248,15 +248,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2022-09-05 22:12:43" itemprop="dateCreated datePublished" datetime="2022-09-05T22:12:43+08:00">2022-09-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-11-13 16:49:21" itemprop="dateModified" datetime="2022-11-13T16:49:21+08:00">2022-11-13</time>
+      <time title="创建时间：2022-11-30 10:52:15 / 修改时间：11:05:36" itemprop="dateCreated datePublished" datetime="2022-11-30T10:52:15+08:00">2022-11-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -264,7 +258,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+          <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a>
         </span>
     </span>
 
@@ -285,22 +279,34 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>C++ 类的静态成员变量一定需要在全局定义</p>
-<p>声明只是定义一个符号，不占用存储空间</p>
-<p>定义是分配内存空间</p>
-<p>初始化是赋一个初始值</p>
-<p>C++ 中类的静态成员变量只是声明，没有定义，没有分配空间</p>
-<p>需要在类的外面定义，实际上是给静态成员变量分配内存</p>
+        <table>
+<thead>
+<tr>
+<th></th>
+<th>syscall &amp; sysret</th>
+<th>sysenter &amp; sysexit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Intel</td>
+<td>所有模式</td>
+<td>仅 64 位长模式</td>
+</tr>
+<tr>
+<td>AMD</td>
+<td>仅传统模式</td>
+<td>所有模式</td>
+</tr>
+</tbody></table>
 <span id="more"></span>
 
 
 
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> a;	<span class="comment">/* 声明但未定义，还为分配内存 */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; A::a &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>syscall 和 sysenter 都是快速系统调用指令，快速地切换 ring3 到 ring 0</p>
+<p>在使用时，需要在 MSR(Model Specific Registers) 中设置入口和栈</p>
+<p>在 seL4 x86_64 (Intel) 中，有</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* sysenter */</span></span><br><span class="line">x86_wrmsr(IA32_SYSENTER_CS_MSR, (<span class="type">uint64_t</span>)(<span class="type">word_t</span>)SEL_CS_0);</span><br><span class="line">x86_wrmsr(IA32_SYSENTER_EIP_MSR, (<span class="type">uint64_t</span>)(<span class="type">word_t</span>)&amp;handle_syscall);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* syscall */</span></span><br><span class="line">x86_wrmsr(IA32_LSTAR_MSR, (<span class="type">uint64_t</span>)&amp;handle_fastsyscall);</span><br><span class="line">x86_wrmsr(IA32_STAR_MSR, ((<span class="type">uint64_t</span>)SEL_CS_0 &lt;&lt; <span class="number">32</span>) | ((<span class="type">uint64_t</span>)SEL_CS_3 &lt;&lt; <span class="number">48</span>));</span><br></pre></td></tr></table></figure>
 
-<p>编译以上代码会出现 undefined reference to <code>A::a</code></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">static</span> <span class="type">int</span> a;	<span class="comment">/* 声明但未定义，还为分配内存 */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> A::a;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; A::a &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以上代码打印出 0，默认初始化为 0，也可以 <code>int A::a=3</code>，定义后初始化</p>
 
     </div>
 
@@ -318,7 +324,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://clumsy-tough.github.io/2022/09/05/C-%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/" title="C++ 类的静态成员变量">https://clumsy-tough.github.io/2022/09/05/C-类的静态成员变量/</a>
+      <a href="https://clumsy-tough.github.io/2022/11/30/syscall-%E5%92%8C-sysenter/" title="syscall 和 sysenter">https://clumsy-tough.github.io/2022/11/30/syscall-和-sysenter/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -327,21 +333,18 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/C-static/" rel="tag"># C++ static</a>
+              <a href="/tags/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" rel="tag"># 系统调用</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/08/30/%E4%B9%A6%E5%8D%95%E5%92%8C%E7%AE%97%E6%B3%95/" rel="prev" title="书单和算法">
-                  <i class="fa fa-chevron-left"></i> 书单和算法
+                <a href="/2022/11/29/Cache-%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F/" rel="prev" title="Cache 组织方式">
+                  <i class="fa fa-chevron-left"></i> Cache 组织方式
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/11/12/11-Container-With-Most-Water/" rel="next" title="11. Container With Most Water">
-                  11. Container With Most Water <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>

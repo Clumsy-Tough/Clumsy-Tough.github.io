@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>syscall 和 sysenter</title>
+    <url>/2022/11/30/syscall-%E5%92%8C-sysenter/</url>
+    <content><![CDATA[<table>
+<thead>
+<tr>
+<th></th>
+<th>syscall &amp; sysret</th>
+<th>sysenter &amp; sysexit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Intel</td>
+<td>所有模式</td>
+<td>仅 64 位长模式</td>
+</tr>
+<tr>
+<td>AMD</td>
+<td>仅传统模式</td>
+<td>所有模式</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+
+
+<p>syscall 和 sysenter 都是快速系统调用指令，快速地切换 ring3 到 ring 0</p>
+<p>在使用时，需要在 MSR(Model Specific Registers) 中设置入口和栈</p>
+<p>在 seL4 x86_64 (Intel) 中，有</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* sysenter */</span></span><br><span class="line">x86_wrmsr(IA32_SYSENTER_CS_MSR, (<span class="type">uint64_t</span>)(<span class="type">word_t</span>)SEL_CS_0);</span><br><span class="line">x86_wrmsr(IA32_SYSENTER_EIP_MSR, (<span class="type">uint64_t</span>)(<span class="type">word_t</span>)&amp;handle_syscall);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* syscall */</span></span><br><span class="line">x86_wrmsr(IA32_LSTAR_MSR, (<span class="type">uint64_t</span>)&amp;handle_fastsyscall);</span><br><span class="line">x86_wrmsr(IA32_STAR_MSR, ((<span class="type">uint64_t</span>)SEL_CS_0 &lt;&lt; <span class="number">32</span>) | ((<span class="type">uint64_t</span>)SEL_CS_3 &lt;&lt; <span class="number">48</span>));</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Cache 组织方式</title>
     <url>/2022/11/29/Cache-%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<p>Cache 寻址需要 index、tag、offset</p>
