@@ -1,6 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Java 程序执行相关概念</title>
+    <url>/2023/02/21/Java-%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p>Java 程序执行过程：</p>
+<p>源程序(<font color=HotPink>*.java</font>) —(编译器)—&gt; 字节码(<font color=HotPink>*.class</font>) —(解释器)—&gt; 执行</p>
+<p>在 Android 中在安装时还需要将 .class 转换为 .dex，将 (stack-based) 转换为 (register-based)，代码会更紧凑 </p>
+<span id="more"></span>
+
+
+
+<h4 id="1-字节码、汇编码、二进制文件"><a href="#1-字节码、汇编码、二进制文件" class="headerlink" title="1. 字节码、汇编码、二进制文件"></a>1. 字节码、汇编码、二进制文件</h4><p>字节码可以认为是软件指令，需要再被转换为硬件指令才能执行</p>
+<h4 id="2-JIT-即时编译"><a href="#2-JIT-即时编译" class="headerlink" title="2. JIT(即时编译)"></a>2. JIT(即时编译)</h4><p>解释器执行过程是：输入的代码(字节码) —&gt; 解释器解释执行 —&gt; 执行结果 </p>
+<p>JIT 编译再执行过程是：输入的代码(字节码) —&gt; 编译器编译 —&gt; 执行 —&gt; 执行结果</p>
+<p>相比解释器，JIT 多了对热点代码的优化和缓存</p>
+<p>说 JIT 比解释器快，说的是 “执行编译后的代码” 比 “解释器解释执行” 快，并不是说 “编译” 比 “解释快”</p>
+<p>对于执行次数少的函数，JIT 编译之后再执行得不偿失，需要先编译再执行，不如直接解释执行</p>
+<h4 id="3-AOT-提前编译"><a href="#3-AOT-提前编译" class="headerlink" title="3. AOT(提前编译)"></a>3. AOT(提前编译)</h4><p>对热点代码提前编译</p>
+<p>在 Android 系统中，会在设备闲置和充电时，选用常用代码进行提前编译</p>
+<h4 id="4-JIT-和-AOT"><a href="#4-JIT-和-AOT" class="headerlink" title="4. JIT 和 AOT"></a>4. JIT 和 AOT</h4><p>在 ART 中，JIT 和 AOT 使用的是同一个编译器</p>
+<p>编译单位是 method</p>
+<br/>
+
+
+
+<p>当程序需要动态链接时，只能用 JIT</p>
+<p>JIT 可以根据当前硬件情况实时编译生成最优机器指令</p>
+<p>JIT 可以根据当前程序的运行情况生成最优的机器指令序列</p>
+<p>JIT 编译需要占用运行时资源</p>
+<br/>
+
+
+
+<p>AOT 可以避免在运行时编译过程是性能和内存损耗</p>
+<p>AOT 在程序运行初期就达到最高性能</p>
+<p>AOT 显著加快程序启动</p>
+<p>AOT 在程序运行前编译会使程序的安装时间增加</p>
+<p>AOT 将提前编译好的内容保存会占用更多存储</p>
+<h4 id="5-为什么-Java-比-C-x2F-C-慢？"><a href="#5-为什么-Java-比-C-x2F-C-慢？" class="headerlink" title="5. 为什么 Java 比 C&#x2F;C++ 慢？"></a>5. 为什么 Java 比 C&#x2F;C++ 慢？</h4><h4 id="6-JNI"><a href="#6-JNI" class="headerlink" title="6. JNI"></a>6. JNI</h4><h5 id="为什么需要JNI？"><a href="#为什么需要JNI？" class="headerlink" title="为什么需要JNI？"></a>为什么需要JNI？</h5><h5 id="JNI为什么效率低？"><a href="#JNI为什么效率低？" class="headerlink" title="JNI为什么效率低？"></a>JNI为什么效率低？</h5>]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>JIT</tag>
+        <tag>AOT</tag>
+        <tag>JNI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>中断和快速系统调用</title>
+    <url>/2022/11/30/%E4%B8%AD%E6%96%AD%E5%92%8C%E5%BF%AB%E9%80%9F%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</url>
+    <content><![CDATA[<p>在 x86 中，系统调用有两种方式，<code>int 0x80</code> 是一般系统调用，<code>syscall</code> 和 <code>sysenter</code> 是快速系统调用，</p>
+<span id="more"></span>
+
+
+
+<h4 id="int-0x80-和-iret："><a href="#int-0x80-和-iret：" class="headerlink" title="int 0x80 和 iret："></a>int 0x80 和 iret：</h4><ol>
+<li>eax 保存中断号(此处对应系统调用号)</li>
+<li>由用户栈切换至内核栈，esp 和 ss<ul>
+<li>Linux 中每个进程都有自己的内核栈</li>
+</ul>
+</li>
+<li>将用户态状态压到内核栈，ss、esp、eflags、cs、eip</li>
+<li>根据中断号找到相应的中断处理函数</li>
+<li>iret，该指令会将用户态状态恢复</li>
+</ol>
+<details></details>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>系统调用</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>syscall 和 sysenter</title>
     <url>/2022/11/30/syscall-%E5%92%8C-sysenter/</url>
     <content><![CDATA[<table>

@@ -20,25 +20,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"clumsy-tough.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="山高我为峰">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Clumsy-Tough&#39;s Blog">
-<meta property="og:url" content="https://clumsy-tough.github.io/tags/C-static/index.html">
+    <meta name="description" content="Java 程序执行过程： 源程序(*.java) —(编译器)—&gt; 字节码(*.class) —(解释器)—&gt; 执行 在 Android 中在安装时还需要将 .class 转换为 .dex，将 (stack-based) 转换为 (register-based)，代码会更紧凑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 程序执行相关概念">
+<meta property="og:url" content="https://clumsy-tough.github.io/2023/02/21/Java-%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/index.html">
 <meta property="og:site_name" content="Clumsy-Tough&#39;s Blog">
-<meta property="og:description" content="山高我为峰">
+<meta property="og:description" content="Java 程序执行过程： 源程序(*.java) —(编译器)—&gt; 字节码(*.class) —(解释器)—&gt; 执行 在 Android 中在安装时还需要将 .class 转换为 .dex，将 (stack-based) 转换为 (register-based)，代码会更紧凑">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-21T01:47:00.000Z">
+<meta property="article:modified_time" content="2023-02-21T02:23:58.579Z">
 <meta property="article:author" content="Clumsy-Tough">
+<meta property="article:tag" content="JIT">
+<meta property="article:tag" content="AOT">
+<meta property="article:tag" content="JNI">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://clumsy-tough.github.io/tags/C-static/">
+<link rel="canonical" href="https://clumsy-tough.github.io/2023/02/21/Java-%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/C-static/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://clumsy-tough.github.io/2023/02/21/Java-%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/","path":"2023/02/21/Java-程序执行相关概念/","title":"Java 程序执行相关概念"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>标签: C++ static | Clumsy-Tough's Blog</title>
+<title>Java 程序执行相关概念 | Clumsy-Tough's Blog</title>
   
 
 
@@ -127,7 +132,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -140,6 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%AD%97%E8%8A%82%E7%A0%81%E3%80%81%E6%B1%87%E7%BC%96%E7%A0%81%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">1. 字节码、汇编码、二进制文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-JIT-%E5%8D%B3%E6%97%B6%E7%BC%96%E8%AF%91"><span class="nav-number">2.</span> <span class="nav-text">2. JIT(即时编译)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-AOT-%E6%8F%90%E5%89%8D%E7%BC%96%E8%AF%91"><span class="nav-number">3.</span> <span class="nav-text">3. AOT(提前编译)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-JIT-%E5%92%8C-AOT"><span class="nav-number">4.</span> <span class="nav-text">4. JIT 和 AOT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E4%B8%BA%E4%BB%80%E4%B9%88-Java-%E6%AF%94-C-x2F-C-%E6%85%A2%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">5. 为什么 Java 比 C&#x2F;C++ 慢？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-JNI"><span class="nav-number">6.</span> <span class="nav-text">6. JNI</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81JNI%EF%BC%9F"><span class="nav-number">6.1.</span> <span class="nav-text">为什么需要JNI？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JNI%E4%B8%BA%E4%BB%80%E4%B9%88%E6%95%88%E7%8E%87%E4%BD%8E%EF%BC%9F"><span class="nav-number">6.2.</span> <span class="nav-text">JNI为什么效率低？</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -206,50 +212,160 @@
 </noscript>
 
 
-    <div class="main-inner tag posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <h1 class="collection-header">C++ static
-          <small>标签</small>
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://clumsy-tough.github.io/2023/02/21/Java-%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/pearl.jpg">
+      <meta itemprop="name" content="Clumsy-Tough">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Clumsy-Tough's Blog">
+      <meta itemprop="description" content="山高我为峰">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java 程序执行相关概念 | Clumsy-Tough's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java 程序执行相关概念
         </h1>
-      </div>
 
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
+
+      <time title="创建时间：2023-02-21 09:47:00 / 修改时间：10:23:58" itemprop="dateCreated datePublished" datetime="2023-02-21T09:47:00+08:00">2023-02-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Java 程序执行过程：</p>
+<p>源程序(<font color=HotPink>*.java</font>) —(编译器)—&gt; 字节码(<font color=HotPink>*.class</font>) —(解释器)—&gt; 执行</p>
+<p>在 Android 中在安装时还需要将 .class 转换为 .dex，将 (stack-based) 转换为 (register-based)，代码会更紧凑 </p>
+<span id="more"></span>
+
+
+
+<h4 id="1-字节码、汇编码、二进制文件"><a href="#1-字节码、汇编码、二进制文件" class="headerlink" title="1. 字节码、汇编码、二进制文件"></a>1. 字节码、汇编码、二进制文件</h4><p>字节码可以认为是软件指令，需要再被转换为硬件指令才能执行</p>
+<h4 id="2-JIT-即时编译"><a href="#2-JIT-即时编译" class="headerlink" title="2. JIT(即时编译)"></a>2. JIT(即时编译)</h4><p>解释器执行过程是：输入的代码(字节码) —&gt; 解释器解释执行 —&gt; 执行结果 </p>
+<p>JIT 编译再执行过程是：输入的代码(字节码) —&gt; 编译器编译 —&gt; 执行 —&gt; 执行结果</p>
+<p>相比解释器，JIT 多了对热点代码的优化和缓存</p>
+<p>说 JIT 比解释器快，说的是 “执行编译后的代码” 比 “解释器解释执行” 快，并不是说 “编译” 比 “解释快”</p>
+<p>对于执行次数少的函数，JIT 编译之后再执行得不偿失，需要先编译再执行，不如直接解释执行</p>
+<h4 id="3-AOT-提前编译"><a href="#3-AOT-提前编译" class="headerlink" title="3. AOT(提前编译)"></a>3. AOT(提前编译)</h4><p>对热点代码提前编译</p>
+<p>在 Android 系统中，会在设备闲置和充电时，选用常用代码进行提前编译</p>
+<h4 id="4-JIT-和-AOT"><a href="#4-JIT-和-AOT" class="headerlink" title="4. JIT 和 AOT"></a>4. JIT 和 AOT</h4><p>在 ART 中，JIT 和 AOT 使用的是同一个编译器</p>
+<p>编译单位是 method</p>
+<br/>
+
+
+
+<p>当程序需要动态链接时，只能用 JIT</p>
+<p>JIT 可以根据当前硬件情况实时编译生成最优机器指令</p>
+<p>JIT 可以根据当前程序的运行情况生成最优的机器指令序列</p>
+<p>JIT 编译需要占用运行时资源</p>
+<br/>
+
+
+
+<p>AOT 可以避免在运行时编译过程是性能和内存损耗</p>
+<p>AOT 在程序运行初期就达到最高性能</p>
+<p>AOT 显著加快程序启动</p>
+<p>AOT 在程序运行前编译会使程序的安装时间增加</p>
+<p>AOT 将提前编译好的内容保存会占用更多存储</p>
+<h4 id="5-为什么-Java-比-C-x2F-C-慢？"><a href="#5-为什么-Java-比-C-x2F-C-慢？" class="headerlink" title="5. 为什么 Java 比 C&#x2F;C++ 慢？"></a>5. 为什么 Java 比 C&#x2F;C++ 慢？</h4><h4 id="6-JNI"><a href="#6-JNI" class="headerlink" title="6. JNI"></a>6. JNI</h4><h5 id="为什么需要JNI？"><a href="#为什么需要JNI？" class="headerlink" title="为什么需要JNI？"></a>为什么需要JNI？</h5><h5 id="JNI为什么效率低？"><a href="#JNI为什么效率低？" class="headerlink" title="JNI为什么效率低？"></a>JNI为什么效率低？</h5>
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2022-09-05T22:12:43+08:00"
-              content="2022-09-05">
-          09-05
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/09/05/C-%E7%B1%BB%E7%9A%84%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F/" itemprop="url">
-            <span itemprop="name">C++ 类的静态成员变量</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          
 
-      
-    </header>
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Clumsy-Tough
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://clumsy-tough.github.io/2023/02/21/Java-%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" title="Java 程序执行相关概念">https://clumsy-tough.github.io/2023/02/21/Java-程序执行相关概念/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JIT/" rel="tag"># JIT</a>
+              <a href="/tags/AOT/" rel="tag"># AOT</a>
+              <a href="/tags/JNI/" rel="tag"># JNI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/11/30/%E4%B8%AD%E6%96%AD%E5%92%8C%E5%BF%AB%E9%80%9F%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/" rel="prev" title="中断和快速系统调用">
+                  <i class="fa fa-chevron-left"></i> 中断和快速系统调用
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
+
 
 </div>
   </main>
