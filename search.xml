@@ -116,34 +116,58 @@
     <url>/2022/11/30/%E4%B8%AD%E6%96%AD%E5%92%8C%E5%BF%AB%E9%80%9F%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8/</url>
     <content><![CDATA[<p>在 x86 中，系统调用有两种方式，<code>int 0x80</code> 是一般系统调用，<code>syscall</code> 和 <code>sysenter</code> 是快速系统调用，</p>
 <span id="more"></span>
-
-
-
-<h4 id="int-0x80-和-iret："><a href="#int-0x80-和-iret：" class="headerlink" title="int 0x80 和 iret："></a>int 0x80 和 iret：</h4><ol>
-<li>eax 保存中断号(此处对应系统调用号)</li>
-<li>由用户栈切换至内核栈，esp 和 ss<ul>
-<li>Linux 中每个进程都有自己的内核栈</li>
+<h4 id="int-0x80-和-iret：">int 0x80 和 iret：</h4>
+<ol>
+<li class="lvl-3">
+<p>eax 保存中断号(此处对应系统调用号)</p>
+</li>
+<li class="lvl-3">
+<p>由用户栈切换至内核栈，esp 和 ss</p>
+<ul class="lvl-2">
+<li class="lvl-5">Linux 中每个进程都有自己的内核栈</li>
 </ul>
 </li>
-<li>将用户态状态压到内核栈，ss、esp、eflags、cs、eip</li>
-<li>根据中断号找到相应的中断处理函数</li>
-<li>iret，该指令会将用户态状态恢复</li>
+<li class="lvl-3">
+<p>将用户态状态压到内核栈，ss、esp、eflags、cs、eip</p>
+</li>
+<li class="lvl-3">
+<p>根据中断号找到相应的中断处理函数</p>
+</li>
+<li class="lvl-3">
+<p>iret，该指令会将用户态状态恢复</p>
+</li>
 </ol>
-<h4 id="syscall-和-sysenter"><a href="#syscall-和-sysenter" class="headerlink" title="syscall 和 sysenter"></a>syscall 和 sysenter</h4><p>区别在于使用的指令集架构不同</p>
+<h4 id="syscall-和-sysenter">syscall 和 sysenter</h4>
+<p>区别在于使用的指令集架构不同</p>
 <p>The fast system call interface is yet another difference.</p>
-<ul>
-<li><strong>Intel</strong> supports <code>SYSENTER</code> in all modes1 - Legacy Mode (or, on the few 32-bit only Intel CPUs, simply Protected Mode), Long Mode and Compatibility Mode. (It doesn’t work in Real Mode, obviously, and the from now on I’m ignoring it.)</li>
-<li><strong>Intel</strong> supports <code>SYSCALL</code> <strong>only in 64-bit Long Mode</strong>2 (not compat. mode). It also requires setting a bit in some MSR.</li>
-<li><strong>AMD</strong> supports <code>SYSENTER</code> <strong>only in Legacy Mode</strong>3, not in any of the Long Mode submodes.</li>
-<li>AMD supports <code>SYSCALL</code> in all modes4.</li>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>Intel</strong> supports <code>SYSENTER</code> in all modes1 - Legacy Mode (or, on the few 32-bit only Intel CPUs, simply Protected Mode), Long Mode and Compatibility Mode. (It doesn’t work in Real Mode, obviously, and the from now on I’m ignoring it.)</p>
+</li>
+<li class="lvl-2">
+<p><strong>Intel</strong> supports <code>SYSCALL</code> <strong>only in 64-bit Long Mode</strong>2 (not compat. mode). It also requires setting a bit in some MSR.</p>
+</li>
+<li class="lvl-2">
+<p><strong>AMD</strong> supports <code>SYSENTER</code> <strong>only in Legacy Mode</strong>3, not in any of the Long Mode submodes.</p>
+</li>
+<li class="lvl-2">
+<p>AMD supports <code>SYSCALL</code> in all modes4.</p>
+</li>
 </ul>
 <p>So as the <a href="http://wiki.osdev.org/SYSENTER">OSDEV page on the topic says</a>:</p>
-<ul>
-<li><strong>In 64-bit Long Mode - only <code>SYSCALL</code> works on both ISAs. (<code>SYSENTER</code> doesn’t work on AMD.)</strong></li>
-<li><strong>In Legacy Mode - only <code>SYSENTER</code> works on both ISAs. (<code>SYSCALL</code> doesn’t work on Intel.)</strong></li>
-<li>There’s no single instruction that works on both Intel and AMD in Compatibility Mode (<code>SYSENTER</code> doesn’t work on AMD and <code>SYSCALL</code> doesn’t work on Intel), but there’s no need for one. A 32-bit kernel will stay in Legacy Mode after boot.</li>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>In 64-bit Long Mode - only <code>SYSCALL</code> works on both ISAs. (<code>SYSENTER</code> doesn’t work on AMD.)</strong></p>
+</li>
+<li class="lvl-2">
+<p><strong>In Legacy Mode - only <code>SYSENTER</code> works on both ISAs. (<code>SYSCALL</code> doesn’t work on Intel.)</strong></p>
+</li>
+<li class="lvl-2">
+<p>There’s no single instruction that works on both Intel and AMD in Compatibility Mode (<code>SYSENTER</code> doesn’t work on AMD and <code>SYSCALL</code> doesn’t work on Intel), but there’s no need for one. A 32-bit kernel will stay in Legacy Mode after boot.</p>
+</li>
 </ul>
-<h4 id="快速系统调用机制"><a href="#快速系统调用机制" class="headerlink" title="快速系统调用机制"></a>快速系统调用机制</h4>]]></content>
+<h4 id="快速系统调用机制">快速系统调用机制</h4>
+]]></content>
       <categories>
         <category>操作系统</category>
       </categories>
@@ -634,8 +658,9 @@
   <entry>
     <title>2022年秋招</title>
     <url>/2022/08/30/2022%E5%B9%B4%E7%A7%8B%E6%8B%9B/</url>
-    <content><![CDATA[<h3 id="2022-秋招"><a href="#2022-秋招" class="headerlink" title="2022 秋招"></a>2022 秋招</h3><p><a href="https://career.huawei.com/reccampportal/portal5/index.html">华为</a>：通用软件开发工程师、操作系统开发工程师(7月开始)</p>
-<p><a href="https://talent.alibaba.com/?lang=zh">阿里&#x2F;蚂蚁</a>：研发工程师 C&#x2F;C++ (8月底-9月底)</p>
+    <content><![CDATA[<h3 id="2022-秋招">2022 秋招</h3>
+<p><a href="https://career.huawei.com/reccampportal/portal5/index.html">华为</a>：通用软件开发工程师、操作系统开发工程师(7月开始)</p>
+<p><a href="https://talent.alibaba.com/?lang=zh">阿里/蚂蚁</a>：研发工程师 C/C++ (8月底-9月底)</p>
 <p><a href="https://app.mokahr.com/apply/armchina/885#/">ARM</a>：软件工程师(8月中旬开始)</p>
 <p><a href="https://jobs.bytedance.com/">字节</a>：后端开发工程师(8月初开始)</p>
 <p><a href="https://careers.pinduoduo.com/campus/">拼多多</a>：(8月初开始-9月初)</p>
@@ -828,23 +853,48 @@
     <url>/2022/07/15/Hexo-GitHub-%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<p>欢迎来到我的博客 ~</p>
 <span id="more"></span>
-
-
-
 <ol>
-<li><p>搭建博客：<a href="https://zhuanlan.zhihu.com/p/60578464#:~:text=%E4%BD%BF%E7%94%A8%20Hexo%2BGitHub%20%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%85%8D%E8%B4%B9%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B%EF%BC%88%E5%B0%8F%E7%99%BD%E5%90%91%EF%BC%89%201%20%E5%87%86%E5%A4%87%202%20%E8%BF%9E%E6%8E%A5%20Github....,Hexo%20%E5%88%B0%20GitHub%20Pages%206%20%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89....%207%20%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8">使用 Hexo+GitHub 搭建个人免费博客教程（小白向）</a></p>
+<li class="lvl-3">
+<p>搭建博客：<a href="https://zhuanlan.zhihu.com/p/60578464#:~:text=%E4%BD%BF%E7%94%A8%20Hexo%2BGitHub%20%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%85%8D%E8%B4%B9%E5%8D%9A%E5%AE%A2%E6%95%99%E7%A8%8B%EF%BC%88%E5%B0%8F%E7%99%BD%E5%90%91%EF%BC%89%201%20%E5%87%86%E5%A4%87%202%20%E8%BF%9E%E6%8E%A5%20Github....,Hexo%20%E5%88%B0%20GitHub%20Pages%206%20%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89....%207%20%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8">使用 Hexo+GitHub 搭建个人免费博客教程（小白向）</a></p>
 </li>
-<li><p>博客美化：<a href="https://blog.csdn.net/nightmare_dimple/article/details/86661502">Hexo博客优化之Next主题美化</a></p>
+<li class="lvl-3">
+<p>博客美化：<a href="https://blog.csdn.net/nightmare_dimple/article/details/86661502">Hexo博客优化之Next主题美化</a></p>
 </li>
-<li><p>标签和分类页：<a href="https://blog.csdn.net/qq_34243930/article/details/104056549">用Github Pages+Hexo搭建博客之(六)如何显示标签和分类页面的内容</a></p>
+<li class="lvl-3">
+<p>标签和分类页：<a href="https://blog.csdn.net/qq_34243930/article/details/104056549">用Github Pages+Hexo搭建博客之(六)如何显示标签和分类页面的内容</a></p>
 </li>
-<li><p>图标网站：<a href="https://zhuanlan.zhihu.com/p/431105940">图标分享 | 30 个免费 icon 下载网站</a></p>
+<li class="lvl-3">
+<p>图标网站：<a href="https://zhuanlan.zhihu.com/p/431105940">图标分享 | 30 个免费 icon 下载网站</a></p>
 </li>
-<li><p>站内搜索：<a href="https://www.jianshu.com/p/d388119a90ec">Hexo增加搜索功能</a> <a href="http://theme-next.iissnan.com/third-party-services.html#local-search">Local Search</a></p>
+<li class="lvl-3">
+<p>站内搜索：<a href="https://www.jianshu.com/p/d388119a90ec">Hexo增加搜索功能</a> <a href="http://theme-next.iissnan.com/third-party-services.html#local-search">Local Search</a></p>
+</li>
+<li class="lvl-3">
+<p>typora(0.11.18)修改快捷键：<a href="https://support.typora.io/">https://support.typora.io/</a></p>
+</li>
+<li class="lvl-3">
+<p>修改主题字体：<a href="https://blog.csdn.net/qq_33154343/article/details/106134472">修改typora主题字体</a> <a href="https://blog.csdn.net/sailist/article/details/104114578">Hexo-Next主题更改字体</a></p>
+</li>
+<li class="lvl-3">
+<p>修改字体颜色：<a href="https://blog.csdn.net/m0_46161993/article/details/123216881">Typora更改斜体字、加粗字、高亮、强调字等颜色</a></p>
+</li>
+<li class="lvl-3">
+<p>选择更高级的Markdown渲染器：<a href="https://blog.csdn.net/qq_42951560/article/details/123596899">【Hexo】选择更高级的Markdown渲染器</a></p>
 </li>
 </ol>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&#x27;xxx&#x27;</span></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">title: Hello World <span class="comment"># 标题</span></span><br><span class="line"><span class="built_in">date</span>: 2019/3/26 hh:mm:ss <span class="comment"># 时间</span></span><br><span class="line">categories: <span class="comment"># 分类</span></span><br><span class="line">- Diary</span><br><span class="line">tags: <span class="comment"># 标签</span></span><br><span class="line">- PS3</span><br><span class="line">- Games</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">摘要</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line">正文</span><br><span class="line"></span><br><span class="line">hexo new <span class="string">&quot;name&quot;</span>       <span class="comment"># 新建文章</span></span><br><span class="line">hexo new page <span class="string">&quot;name&quot;</span>  <span class="comment"># 新建页面</span></span><br><span class="line">hexo g                <span class="comment"># 生成页面</span></span><br><span class="line">hexo d                <span class="comment"># 部署发布</span></span><br><span class="line">hexo g -d             <span class="comment"># 生成页面并部署</span></span><br><span class="line">hexo s                <span class="comment"># 本地预览</span></span><br><span class="line">hexo clean            <span class="comment"># 清除缓存和已生成的静态文件</span></span><br><span class="line">hexo <span class="built_in">help</span>             <span class="comment"># 帮助</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置置顶，在博客的根目录执行</span></span><br><span class="line">npm uninstall hexo-generator-index --save	<span class="comment"># 不做好像也可</span></span><br><span class="line">npm install hexo-generator-index-pin-top --save</span><br><span class="line">---</span><br><span class="line">title: xxx</span><br><span class="line">top: <span class="literal">true</span></span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo new <span class="string">&#x27;xxx&#x27;</span></span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">title: Hello World <span class="comment"># 标题</span></span><br><span class="line"><span class="built_in">date</span>: 2019/3/26 hh:mm:ss <span class="comment"># 时间</span></span><br><span class="line">categories: <span class="comment"># 分类</span></span><br><span class="line">- Diary</span><br><span class="line">tags: <span class="comment"># 标签</span></span><br><span class="line">- PS3</span><br><span class="line">- Games</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">摘要</span><br><span class="line">&lt;!--more--&gt;</span><br><span class="line">正文</span><br><span class="line"></span><br><span class="line">hexo new <span class="string">&quot;name&quot;</span>       <span class="comment"># 新建文章</span></span><br><span class="line">hexo new page <span class="string">&quot;name&quot;</span>  <span class="comment"># 新建页面</span></span><br><span class="line">hexo g                <span class="comment"># 生成页面</span></span><br><span class="line">hexo d                <span class="comment"># 部署发布</span></span><br><span class="line">hexo g -d             <span class="comment"># 生成页面并部署</span></span><br><span class="line">hexo s                <span class="comment"># 本地预览</span></span><br><span class="line">hexo clean            <span class="comment"># 清除缓存和已生成的静态文件</span></span><br><span class="line">hexo <span class="built_in">help</span>             <span class="comment"># 帮助</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置置顶和隐藏，在博客的根目录执行</span></span><br><span class="line">npm uninstall hexo-generator-index --save	<span class="comment"># 不做好像也可</span></span><br><span class="line">npm install hexo-generator-index-pin-top --save</span><br><span class="line">---</span><br><span class="line">title: xxx</span><br><span class="line">top: <span class="literal">true</span></span><br><span class="line">visible: hiden</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特殊语法</span></span><br><span class="line">+++ **点击折叠**</span><br><span class="line">这是被隐藏的内容</span><br><span class="line">+++</span><br><span class="line"></span><br><span class="line">::: tips</span><br><span class="line">**提示**</span><br><span class="line">这是一个提示</span><br><span class="line">:::</span><br><span class="line"></span><br><span class="line">::: warning</span><br><span class="line">**注意**</span><br><span class="line">这是一个警告</span><br><span class="line">:::</span><br><span class="line"></span><br><span class="line">::: danger</span><br><span class="line">**警告**</span><br><span class="line">这是一个危险信号</span><br><span class="line">:::</span><br><span class="line"></span><br><span class="line">::: success</span><br><span class="line">**成功**</span><br><span class="line">这是一个成功信号</span><br><span class="line">:::</span><br></pre></td></tr></table></figure>
+<div class="tips">
+<p>设置 typora 字体和 next 字体</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 复制 &#123;current-theme&#125;.css 生成 &#123;current-theme&#125;.user.css (原内容不要) */</span></span><br><span class="line"><span class="comment">/* 设置如下：(只会用到前两个，不存在时才会使用第三个、第四个...) */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">&quot;Consolas&quot;</span>,<span class="string">&quot;KaiTi&quot;</span>, <span class="string">&quot;Helvetica Neue&quot;</span>, Helvetica, Arial, <span class="string">&#x27;Segoe UI Emoji&#x27;</span>, sans-serif;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 修改 hexo themes/next_c/_config.yml</span></span><br><span class="line"><span class="attr">font:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="attr">global:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br><span class="line">    <span class="comment"># family: Lato</span></span><br><span class="line">    <span class="attr">family:</span> <span class="string">Times</span> <span class="string">New</span> <span class="string">Roman,</span> <span class="string">KaiTi</span></span><br><span class="line">    <span class="attr">size:</span></span><br><span class="line">  <span class="comment"># ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="attr">codes:</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">family:</span> <span class="string">Consolas,</span> <span class="string">KaiTi</span></span><br></pre></td></tr></table></figure>
+</div>
+<div class="tips">
+<p>设置 typora 字体样式，同时设置 hexo 生成样式</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 1. typora 设置字体样式 */</span></span><br><span class="line"><span class="comment">/* 复制 &#123;current-theme&#125;.css 生成 &#123;current-theme&#125;.user.css (原内容不要) */</span></span><br><span class="line"><span class="comment">/* 设置如下： */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">mark</span> &#123;</span><br><span class="line">    <span class="attribute">background</span>: <span class="number">#ffb07c</span>;</span><br><span class="line">&#125; <span class="comment">/* Highlight 高亮 */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">strong</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#b5302e</span>;</span><br><span class="line">&#125; <span class="comment">/* Blod 加粗 */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">em</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#5f34e7</span>;</span><br><span class="line">&#125; <span class="comment">/* Italian 斜体字 */</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">a</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="number">#005dad</span>;</span><br><span class="line">&#125; <span class="comment">/* Link 链接 */</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 2. typora 高亮快捷键Ctrl+G */</span></span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> 偏好设置</span><br><span class="line"><span class="number">2.</span> 打开高级设置</span><br><span class="line"><span class="number">3.</span> </span><br><span class="line"><span class="attr">&quot;keyBinding&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Highlight&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Ctrl+G&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 3. hexo 设置高级渲染</span></span><br><span class="line">npm un hexo-renderer-marked --save</span><br><span class="line"></span><br><span class="line">npm i hexo-renderer-markdown-it --save</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将以下复制到 hexo _config.yml，可以放在 depoly 上面</span></span><br><span class="line"><span class="comment"># Markdown-it config</span></span><br><span class="line"><span class="comment">## Docs: https://github.com/celsomiranda/hexo-renderer-markdown-it/wiki</span></span><br><span class="line">markdown:</span><br><span class="line">  preset: <span class="string">&quot;default&quot;</span></span><br><span class="line">  render:</span><br><span class="line">    html: <span class="literal">true</span></span><br><span class="line">    xhtmlOut: <span class="literal">false</span></span><br><span class="line">    langPrefix: <span class="string">&quot;language-&quot;</span></span><br><span class="line">    breaks: <span class="literal">true</span></span><br><span class="line">    linkify: <span class="literal">true</span></span><br><span class="line">    typographer: <span class="literal">true</span></span><br><span class="line">    quotes: <span class="string">&quot;“”‘’&quot;</span></span><br><span class="line">  enable_rules:</span><br><span class="line">  disable_rules:</span><br><span class="line">  plugins:</span><br><span class="line">    - markdown-it-abbr</span><br><span class="line">    - markdown-it-cjk-breaks</span><br><span class="line">    - markdown-it-deflist</span><br><span class="line">    - markdown-it-emoji</span><br><span class="line">    - markdown-it-footnote</span><br><span class="line">    - markdown-it-ins</span><br><span class="line">    - markdown-it-mark</span><br><span class="line">    - markdown-it-sub</span><br><span class="line">    - markdown-it-sup</span><br><span class="line">    - markdown-it-checkbox</span><br><span class="line">    - markdown-it-imsize</span><br><span class="line">    - markdown-it-expandable</span><br><span class="line">    - name: markdown-it-container</span><br><span class="line">      options: success</span><br><span class="line">    - name: markdown-it-container</span><br><span class="line">      options: tips</span><br><span class="line">    - name: markdown-it-container</span><br><span class="line">      options: warning</span><br><span class="line">    - name: markdown-it-container</span><br><span class="line">      options: danger</span><br><span class="line">  anchors:</span><br><span class="line">    level: 2</span><br><span class="line">    collisionSuffix: <span class="string">&quot;&quot;</span></span><br><span class="line">    permalink: <span class="literal">false</span></span><br><span class="line">    permalinkClass: <span class="string">&quot;header-anchor&quot;</span></span><br><span class="line">    permalinkSide: <span class="string">&quot;left&quot;</span></span><br><span class="line">    permalinkSymbol: <span class="string">&quot;¶&quot;</span></span><br><span class="line">    <span class="keyword">case</span>: 0</span><br><span class="line">    separator: <span class="string">&quot;-&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将以下复制到 hexo themes\next\source\css\_colors.styl</span></span><br><span class="line">.tips &#123;</span><br><span class="line">    padding-left: 10px;</span><br><span class="line">    background-color rgba(52,152,219,.3);</span><br><span class="line">    border-left 4px solid rgb(52,152,219);</span><br><span class="line">    color: darken(rgb(52,152,219),20%);</span><br><span class="line">&#125;</span><br><span class="line">.success &#123;</span><br><span class="line">    padding-left: 10px;</span><br><span class="line">    background-color rgba(46,204,113,.3);</span><br><span class="line">    border-left 4px solid rgb(46,204,113);</span><br><span class="line">    color: darken(rgb(46,204,113),20%);</span><br><span class="line">&#125;</span><br><span class="line">.warning &#123;</span><br><span class="line">    padding-left: 10px;</span><br><span class="line">    background-color rgba(241,196,15,.3);</span><br><span class="line">    border-left 4px solid rgb(241,196,15);</span><br><span class="line">    color: darken(rgb(241,196,15),20%);</span><br><span class="line">&#125;</span><br><span class="line">.danger &#123;</span><br><span class="line">    padding-left: 10px;</span><br><span class="line">    background-color rgba(231,76,60,.3);</span><br><span class="line">    border-left 4px solid rgb(231,76,60);</span><br><span class="line">    color: darken(rgb(231,76,60),20%);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"># 修改 hexo themes\next\source\css\_colors<span class="selector-class">.styl</span></span><br><span class="line"><span class="selector-tag">strong</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: crimson;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* .post-title */</span></span><br><span class="line"><span class="selector-tag">h2</span>, <span class="selector-tag">h3</span>, <span class="selector-tag">h4</span>, <span class="selector-tag">h5</span>, <span class="selector-tag">h6</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: black;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div>
 ]]></content>
       <categories>
         <category>教程</category>
